@@ -1,28 +1,12 @@
-// 8 BIT DIVISION
-# ORG 2000H
-# BEGIN 2000H
-	   LHLD 2501
-	   LDA 2503
-	   MOV B,A
-	   MVI C,08
+        LXI H, 0000H    ; Initialize H register to 0
+        MOV A, D        ; Move the value from register D to accumulator
+        CMP E           ; Compare the value in accumulator with the value in register E
+        JNC SKIP        ; Jump if no carry flag is set (i.e., D >= E)
+        MOV H, E        ; If carry flag is set (i.e., D < E), move the value from register E to register H
+        JMP END         ; Jump to end
 
-LOOP:	   DAD H
-	   MOV A,H
-	   SUB B
-	   JC AHEAD
-	   MOV H,A
-	   INR L
+SKIP:   MOV H, D        ; If no carry flag is set (i.e., D >= E), move the value from register D to register H
 
-AHEAD:	   DCR C
-	   JNZ LOOP
-	   SHLD 2504
-	   HLT
+END:    HLT             ; Halt the program
 
-# ORG 2501H
-// LSB OF DIVIDEND , MSB OF DIVIDEND , DIVISOR
-# DB 9BH,48H,1AH	
-
-
-// ANSWER
-// AT ADDRESS 2504 - F2H, QUOTIENT
-// AT ADDRESS 2505 - 07H, REMAINDER
+        END             ; End of program
